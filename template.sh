@@ -23,6 +23,7 @@ CPUS=12
 CLUSTER_NODES=2
 
 ADAPTORS=${RESOURCES}/qc/TruSeq3-PE-2.fa
+SCRIPTS=scripts
 
 queue_usage=''
 function queue {

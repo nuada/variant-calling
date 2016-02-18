@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PICARD=${RESOURCES}/software/picard-tools-1.139/picard
+PICARD=/usr/bin/picard-tools
 
 function bed_to_interval_list {
 	echo '@HD VN:1.0 SO:coordinate' | tr " " "\t"

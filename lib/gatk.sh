@@ -25,7 +25,7 @@ HAPMAP=${GATK_RESOURCES}/hapmap_3.3.${REFERENCE}.vcf
 MILLS_N_KG_INDELS=${GATK_RESOURCES}/Mills_and_1000G_gold_standard.indels.${REFERENCE}.vcf
 
 function gatk {
-	java ${JAVA_OPTS} -jar ${RESOURCES}/software/GenomeAnalysisTK-3.1-1/GenomeAnalysisTK.jar "$@"
+	java ${JAVA_OPTS} -jar ${RESOURCES}/software/GenomeAnalysisTK-3.5/GenomeAnalysisTK.jar "$@"
 }
 
 align_usage='<sample_id>'

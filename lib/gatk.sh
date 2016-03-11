@@ -107,6 +107,7 @@ function align {
 function _hard_filtering {
 	log 'SNPs hard filtering'
 	gatk -T VariantFiltration \
+		--no_cmdline_in_header \
 		--reference_sequence ${HG} \
 		--variant ${temp}/${GATK_VARIANTS_PREFIX}.snps.vcf \
 		-o ${temp}/${GATK_VARIANTS_PREFIX}.snps.filtered.vcf \
@@ -121,6 +122,7 @@ function _hard_filtering {
 
 	log 'Indels hard filtering'
 	gatk -T VariantFiltration \
+		--no_cmdline_in_header \
 		--reference_sequence ${HG} \
 		--variant ${temp}/${GATK_VARIANTS_PREFIX}.indels.vcf \
 		-o ${temp}/${GATK_VARIANTS_PREFIX}.indels.filtered.vcf \
@@ -209,6 +211,7 @@ variant_calling_usage=''
 function variant_calling {
 	log 'Raw variant calls'
 	gatk -T UnifiedGenotyper --num_threads ${CPUS} \
+		--no_cmdline_in_header \
 		--reference_sequence ${HG} --dbsnp ${DBSNP} \
 		$(for sample in ${SAMPLES}; do echo --input_file ${RESULTS}/${sample}.bam; done) \
 		-o ${temp}/${GATK_VARIANTS_PREFIX}.raw.vcf \
@@ -226,6 +229,7 @@ function variant_calling {
 	popd
 
 	gatk -T VariantAnnotator --num_threads ${CPUS} \
+		--no_cmdline_in_header \
 		--reference_sequence ${HG} \
 		--annotation SnpEff \
 		--variant ${temp}/${GATK_VARIANTS_PREFIX}.raw.vcf \
@@ -247,9 +251,11 @@ function variant_calling {
 
 	log 'Combine filtered variants'
 	gatk -T CombineVariants --num_threads ${CPUS} \
+		--genotypemergeoption PRIORITIZE \
+		--rod_priority_list snps,indels \
 		--reference_sequence ${HG} \
-		--variant ${temp}/${GATK_VARIANTS_PREFIX}.snps.filtered.vcf \
-		--variant ${temp}/${GATK_VARIANTS_PREFIX}.indels.filtered.vcf \
+		--variant:snps ${temp}/${GATK_VARIANTS_PREFIX}.snps.filtered.vcf \
+		--variant:indels ${temp}/${GATK_VARIANTS_PREFIX}.indels.filtered.vcf \
 		-o ${temp}/${GATK_VARIANTS_PREFIX}.filtered.vcf
 	cp -v ${temp}/${GATK_VARIANTS_PREFIX}.filtered.vcf* ${RESULTS}/
 

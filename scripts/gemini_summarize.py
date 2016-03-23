@@ -25,7 +25,7 @@ for row in gq:
 		header_printed = True
 
 	# Output only het & hom alt variants
-	for sample in [item for sublist in row.genotype_dict for item in sublist]:
+	for sample in row['variant_samples']:
 		# Drop low depth and low quality variants
 		if row['gt_depths'][gq.sample2index[sample]] < DP_THRESHOLD or row['gt_quals'][gq.sample2index[sample]] < GQ_THRESHOLD: continue
 
